@@ -1,0 +1,90 @@
+﻿@page "/User/Index"
+@inject CService<AspNetUsers> userService
+@inject NavigationManager navigationManager
+
+<div class="card">
+    <div class="card-header">
+        <h3>Usuarios</h3>
+    </div>
+    <div class="card-body">
+        <input type="text" class="form-control" placeholder="Buscar" @bind="filtra" />
+        <select class="form-control" @bind="valor">
+            <option value="Id">Id</option>
+            <option value="UserName">Nombre</option>
+            <option value="Email">Email</option>
+            <option value="PhoneNumber">Telefono</option>
+        </select>
+        <button class="btn btn-primary" @onclick="() => Filtrar(valor, filtra)">Buscar</button>
+        <br />
+        <br />
+        <br />
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Contraseña</th>
+                    <th>Telefono</th>
+                    <th>LockoutEnd</th>
+                    <th>Ver</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in user)
+                {
+                    <tr>
+                        <td>@user.Id</td>
+                        <td>@user.UserName</td>
+                        <td>@user.Email</td>
+                        <td>@user.PasswordHash</td>
+                        <td>@user.PhoneNumber</td>
+                        <td>@user.LockoutEnd</td>
+            <dt>
+                <button class="btn btn-primary" @onclick="() => ViwUser(user.Id)">Ver</button>
+            </dt>
+            <td>
+                <button class="btn btn-primary" @onclick="() => EditUser(user.Id)">Editar</button>
+            </td>
+            <dt>
+                <button class="btn btn-danger" @onclick="() => DeleteUser(user.Id)">Eliminar</button>
+            </dt>
+            </tr>
+                }
+        </tbody>
+        </table>
+    </div>
+    <div class="card-footer">
+        <button class="btn btn-primary" @onclick="CreateUser">Crear Usuario</button>
+    </div>
+</div>
+@code {
+    public List<AspNetUsers> user = new List<AspNetUsers>();
+    private string filtra = "";
+    private string valor = "";
+    private void Filtrar(string valor, string filtra)
+    {
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        user = await userService.GetAll();
+    }
+    private void CreateUser()
+    {
+        navigationManager.NavigateTo("/User/Create");
+    }
+    private void ViwUser(int id)
+    {
+        navigationManager.NavigateTo("/User/Details/" + id);
+    }
+    private void EditUser(int id)
+    {
+        navigationManager.NavigateTo("/User/Edit/" + id);
+    }
+    private void DeleteUser(int id)
+    {
+        navigationManager.NavigateTo("/User/Delete/" + id);
+    }
+}
