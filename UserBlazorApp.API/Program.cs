@@ -1,6 +1,9 @@
 
 using Microsoft.EntityFrameworkCore;
-using UsersBlazorApp.Data.Context;
+using UserBlazorApp.API.Service;
+using UsersBlazorApp.API.Context;
+using UsersBlazorApp.Data.Interfacez;
+using UsersBlazorApp.Data.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +15,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<UsersDbContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("ConStr")));
+builder.Services.AddScoped<IAPIService<AspNetUsers>, UserService>();
+
+builder.Services.AddCors(options => {
+    options.AddPolicy("AllowAnyOrigin", builder => builder.AllowAnyOrigin()
+                                                          .AllowAnyMethod()
+                                                          .AllowAnyHeader());
+});
 
 var app = builder.Build();
 
@@ -21,6 +31,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors("AllowAllOrigin");
 
 app.UseHttpsRedirection();
 
