@@ -1,0 +1,54 @@
+﻿@page "/User/Create"
+@inject CService<AspNetUsers> userService
+@inject NavigationManager navigationManager
+
+<EditForm Model="AspNetUsers" OnValidSubmit="Guardar">
+    <div class="card">
+        <div class="card-header">
+            <h3>Crear Usuario</h3>
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                <label for="Id">Id</label>
+                <InputNumber id="Id" class="form-control" @bind-Value="AspNetUsers.Id" />
+            </div>
+            <div class="form-group">
+                <label for="UserName">Nombre</label>
+                <InputText id="UserName" class="form-control" @bind-Value="AspNetUsers.UserName" />
+            </div>
+            <div class="form-group">
+                <label for="Email">Email</label>
+                <InputText id="Email" class="form-control" @bind-Value="AspNetUsers.Email" />
+            </div>
+            <div class="form-group">
+                <label for="PasswordHash">Contraseña</label>
+                <InputText id="PasswordHash" class="form-control" @bind-Value="AspNetUsers.PasswordHash" />
+            </div>
+            <div class="form-group">
+                <label for="PhoneNumber">Telefono</label>
+                <InputText id="PhoneNumber" class="form-control" @bind-Value="AspNetUsers.PhoneNumber" />
+            </div>
+            <div class="form-group">
+                <label for="LockoutEnd">LockoutEnd</label>
+                <InputDate id="LockoutEnd" class="form-control" @bind-Value="AspNetUsers.LockoutEnd" />
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    public AspNetUsers AspNetUsers = new AspNetUsers();
+    public async Task Guardar()
+    {
+        await userService.Add(AspNetUsers);
+        navigationManager.NavigateTo("/User/Index");
+    }
+    public void Volver()
+    {
+        navigationManager.NavigateTo("/User/Index");
+    }
+}
+
