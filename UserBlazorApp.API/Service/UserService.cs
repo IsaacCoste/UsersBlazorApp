@@ -16,7 +16,9 @@ public class UserService(UsersDbContext context) : IAPIService<AspNetUsers>
 
     public async Task<AspNetUsers> Get(int id)
     {
-        return await context.AspNetUsers.FirstAsync(u => u.Id == id);
+        return await context.AspNetUsers
+            .Include(c => c.AspNetUserClaims)
+            .FirstAsync(u => u.Id == id);
     }
 
     public async Task<AspNetUsers> Add(AspNetUsers user)
@@ -43,7 +45,9 @@ public class UserService(UsersDbContext context) : IAPIService<AspNetUsers>
 
     public async Task<bool> Delete(int id)
     {
-        var usuario = await context.AspNetUsers.FirstOrDefaultAsync(u => u.Id == id);
+        var usuario = await context.AspNetUsers
+            .Include(c => c.AspNetUserClaims)
+            .FirstOrDefaultAsync(u => u.Id == id);
         if (usuario == null)
         {
             return false;
