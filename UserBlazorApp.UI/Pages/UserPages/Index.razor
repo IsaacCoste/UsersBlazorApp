@@ -66,6 +66,22 @@
     private string valor = "";
     private void Filtrar(string valor, string filtra)
     {
+        if (valor == "Id")
+        {
+            user = user.Where(u => u.Id.ToString().Contains(filtra)).ToList();
+        }
+        else if (valor == "UserName")
+        {
+            user = user.Where(u => u.UserName.Contains(filtra)).ToList();
+        }
+        else if (valor == "Email")
+        {
+            user = user.Where(u => u.Email.Contains(filtra)).ToList();
+        }
+        else if (valor == "PhoneNumber")
+        {
+            user = user.Where(u => u.PhoneNumber.Contains(filtra)).ToList();
+        }
     }
     protected override async Task OnInitializedAsync()
     {
